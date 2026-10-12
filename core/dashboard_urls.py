@@ -1,0 +1,32 @@
+from django.urls import path
+from . import dashboard_views as views
+
+urlpatterns = [
+    path("login/", views.login_view, name="dashboard-login"),
+    path("logout/", views.logout_view, name="dashboard-logout"),
+    path("", views.index, name="dashboard-index"),
+    path("site/", views.site_settings, name="dashboard-site"),
+    path("hero/", views.hero, name="dashboard-hero"),
+    path("about/", views.about, name="dashboard-about"),
+    path("mission/", views.mission, name="dashboard-mission"),
+    path("services/", views.services, name="dashboard-services"),
+    path("services/new/", views.service_create, name="dashboard-service-create"),
+    path("services/<int:pk>/", views.service_edit, name="dashboard-service-edit"),
+    path("services/<int:pk>/delete/", views.service_delete, name="dashboard-service-delete"),
+    path("service-categories/", views.service_categories, name="dashboard-service-categories"),
+    path("service-categories/new/", views.service_category_create, name="dashboard-service-category-create"),
+    path("service-categories/<int:pk>/", views.service_category_edit, name="dashboard-service-category-edit"),
+    path("service-categories/<int:pk>/delete/", views.service_category_delete, name="dashboard-service-category-delete"),
+    path("equipment/", views.equipment, name="dashboard-equipment"),
+    path("equipment/categories/new/", views.equipment_category_create, name="dashboard-equipment-category-create"),
+    path("equipment/categories/<int:pk>/", views.equipment_category_edit, name="dashboard-equipment-category-edit"),
+    path("equipment/categories/<int:pk>/delete/", views.equipment_category_delete, name="dashboard-equipment-category-delete"),
+    path("equipment/brands/new/", views.equipment_brand_create, name="dashboard-equipment-brand-create"),
+    path("equipment/brands/<int:pk>/", views.equipment_brand_edit, name="dashboard-equipment-brand-edit"),
+    path("equipment/brands/<int:pk>/delete/", views.equipment_brand_delete, name="dashboard-equipment-brand-delete"),
+    path("stats/", views.stats, name="dashboard-stats"),
+    path("partners/", views.partners, name="dashboard-partners"),
+    path("seo/", views.seo, name="dashboard-seo"),
+    path("messages/", views.messages_list, name="dashboard-messages"),
+    path("messages/<int:pk>/", views.message_detail, name="dashboard-message-detail"),
+]

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="bg-kula-dark text-white py-20 md:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+        <i data-lucide="wrench" class="absolute -top-20 -right-20 w-96 h-96"></i>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl" data-aos="fade-up">
+            <div class="inline-block text-xs font-bold uppercase tracking-widest text-kula-blue mb-4">What We Do</div>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-6">Our Services</h1>
+            <p class="text-lg text-gray-300 leading-relaxed">Comprehensive auto electrical installation and maintenance solutions for heavy-duty and earth-moving equipment.</p>
+        </div>
+    </div>
+</section>
+
+{% for category in service_categories %}
+<section class="py-20 md:py-28 {% if not forloop.first %}bg-kula-light{% endif %}">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-16" data-aos="fade-up">
+            <div class="inline-flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-xl bg-kula-blue flex items-center justify-center">
+                    <i data-lucide="{% if 'install' in category.slug %}plug-zap{% else %}settings{% endif %}" class="w-6 h-6 text-white"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-kula-dark"
+                    data-editable data-model="service_category" data-field="name" data-object-id="{{ category.id }}">
+                    {{ category.name }}
+                </h2>
+            </div>
+            {% if category.description %}
+            <p class="text-kula-grey leading-relaxed"
+               data-editable data-model="service_category" data-field="description" data-object-id="{{ category.id }}" data-multiline="true">
+                {{ category.description }}
+            </p>
+            {% endif %}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for service in category.services.all %}
+            {% if service.is_active %}
+            <div class="group bg-white rounded-2xl border border-kula-light p-8 hover:shadow-2xl hover:border-kula-blue/30 transition duration-300" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                <div class="w-14 h-14 rounded-xl bg-kula-blue/10 flex items-center justify-center mb-6 group-hover:bg-kula-blue transition">
+                    <i data-lucide="{{ service.icon|default:'wrench' }}" class="w-7 h-7 text-kula-blue group-hover:text-white transition"></i>
+                </div>
+                <h3 class="text-xl font-bold text-kula-dark mb-3"
+                    data-editable data-model="service" data-field="title" data-object-id="{{ service.id }}">
+                    {{ service.title }}
+                </h3>
+                <p class="text-kula-grey leading-relaxed text-sm"
+                   data-editable data-model="service" data-field="description" data-object-id="{{ service.id }}" data-multiline="true">
+                    {{ service.description }}
+                </p>
+            </div>
+            {% endif %}
+            {% empty %}
+            <div class="col-span-full text-center text-kula-grey py-12">Services coming soon</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% empty %}
+<section class="py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-kula-grey">
+        Services coming soon
+    </div>
+</section>
+{% endfor %}
+
+<section class="py-20 md:py-28">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-kula-blue to-kula-dark rounded-3xl p-12 md:p-16 text-center text-white shadow-2xl" data-aos="zoom-in">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Need a Service Done?</h2>
+            <p class="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">Talk to our qualified team about your heavy-duty equipment. We bring innovation and precision to every job.</p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="{% url 'contact' %}" class="bg-white text-kula-blue hover:bg-kula-light font-semibold px-8 py-4 rounded-lg transition">Get a Quote</a>
+                <a href="tel:{{ site.phone_primary }}" class="border-2 border-white/40 hover:border-white text-white font-semibold px-8 py-4 rounded-lg transition flex items-center gap-2">
+                    <i data-lucide="phone" class="w-5 h-5"></i> {{ site.phone_primary }}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

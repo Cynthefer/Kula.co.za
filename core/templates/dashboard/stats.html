@@ -1,0 +1,62 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Stats{% endblock %}
+{% block page_title %}Stats{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-2xl border border-kula-light p-6">
+            <h2 class="font-bold text-kula-dark mb-4">Current Stats</h2>
+            {% if items %}
+            <div data-sortable="site_stat" class="space-y-3">
+                {% for item in items %}
+                <div data-id="{{ item.id }}" class="flex items-center gap-4 bg-kula-light rounded-xl p-4">
+                    <button data-drag-handle class="cursor-grab text-kula-grey hover:text-kula-blue">
+                        <i data-lucide="grip-vertical" class="w-5 h-5"></i>
+                    </button>
+                    <div class="w-12 h-12 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="{{ item.icon|default:'bar-chart-3' }}" class="w-6 h-6 text-kula-blue"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-2xl font-extrabold text-kula-dark">{{ item.value }}</div>
+                        <div class="text-sm text-kula-grey">{{ item.label }}</div>
+                    </div>
+                    <form method="post" action="#" onsubmit="return confirm('Delete this stat?')">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 hover:text-red-700 p-2">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center text-kula-grey text-sm py-8">No stats yet. Add your first on the right.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div>
+        <div class="bg-white rounded-2xl border border-kula-light p-6">
+            <h2 class="font-bold text-kula-dark mb-4">Add Stat</h2>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                {% for field in form %}
+                <div>
+                    <label class="block text-sm font-semibold text-kula-dark mb-1">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<p class="text-xs text-red-600 mt-1">{{ field.errors|join:", " }}</p>{% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="w-full bg-kula-blue hover:bg-kula-dark text-white font-semibold py-2.5 rounded-lg transition text-sm">
+                    Add Stat
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Messages{% endblock %}
+{% block page_title %}Messages{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-2xl border border-kula-light overflow-hidden">
+    {% if items %}
+    <div class="divide-y divide-kula-light">
+        {% for item in items %}
+        <a href="{% url 'dashboard-message-detail' item.pk %}" class="flex items-center gap-4 p-5 hover:bg-kula-light/50 transition">
+            <div class="w-10 h-10 rounded-full bg-kula-blue/10 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="user" class="w-5 h-5 text-kula-blue"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                    <div class="font-semibold text-kula-dark">{{ item.name }}</div>
+                    {% if not item.is_read %}
+                    <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full font-bold">New</span>
+                    {% endif %}
+                </div>
+                <div class="text-sm text-kula-grey truncate">{{ item.subject|default:item.message|truncatechars:80 }}</div>
+            </div>
+            <div class="text-xs text-kula-grey flex-shrink-0">{{ item.created_at|date:"M d, Y" }}</div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="p-16 text-center">
+        <i data-lucide="inbox" class="w-16 h-16 mx-auto mb-4 text-gray-300"></i>
+        <p class="text-kula-grey">No messages yet.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

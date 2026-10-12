@@ -1,0 +1,33 @@
+.edit-mode [data-editable] {
+    outline: 2px dashed #1E73BE;
+    outline-offset: 4px;
+    cursor: text;
+    transition: background-color 0.2s;
+}
+.edit-mode [data-editable]:hover {
+    background-color: rgba(30, 115, 190, 0.08);
+}
+.edit-mode [data-editable]:focus {
+    outline: 2px solid #1E73BE;
+    background-color: rgba(30, 115, 190, 0.12);
+}
+.skeleton {
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.4s ease-in-out infinite;
+    border-radius: 0.5rem;
+}
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.swiper-pagination-bullet-active {
+    background: #1E73BE !important;
+}
+.swiper-button-next, .swiper-button-prev {
+    color: #1E73BE !important;
+}
+[data-editable][contenteditable="true"]:empty:before {
+    content: attr(data-placeholder);
+    color: #9CA3AF;
+}

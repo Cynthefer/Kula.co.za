@@ -1,0 +1,5 @@
+django >= 6.1.2
+django-taggit >= 6.1.0
+django-imagekit >= 6.1.1
+django-ckeditor-5 >= 0.2.20
+djangorestframework >= 3.18.3

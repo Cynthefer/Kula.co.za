@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if seo %}{{ seo.meta_title }}{% else %}{{ site.company_name }}{% endif %}</title>
+<meta name="description" content="{% if seo %}{{ seo.meta_description }}{% else %}{{ site.tagline }}{% endif %}">
+{% if seo.keywords %}<meta name="keywords" content="{{ seo.keywords }}">{% endif %}
+{% if seo.og_image %}
+<meta property="og:image" content="{{ seo.og_image_display.url }}">
+{% endif %}
+<meta property="og:title" content="{% if seo %}{{ seo.meta_title }}{% else %}{{ site.company_name }}{% endif %}">
+<meta property="og:description" content="{% if seo %}{{ seo.meta_description }}{% else %}{{ site.tagline }}{% endif %}">
+{% if site.favicon %}<link rel="icon" href="{{ site.favicon.url }}">{% endif %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                kula: {
+                    blue: '#1E73BE',
+                    dark: '#2B2B2B',
+                    grey: '#6B7280',
+                    light: '#F3F4F6',
+                },
+            },
+            fontFamily: {
+                sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+        },
+    },
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="{% static 'css/kula.css' %}">
+{% block head %}{% endblock %}
+</head>
+<body class="bg-white text-kula-dark font-sans antialiased" x-data="{ mobileNav: false, editMode: false }">
+
+{% include "partials/nav.html" %}
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+{% include "partials/footer.html" %}
+
+<div id="toast-container"></div>
+
+<script>
+window.kulaConfig = {
+    isStaff: {% if user.is_authenticated and user.is_staff %}true{% else %}false{% endif %},
+    csrfToken: '{{ csrf_token }}',
+    apiBase: '/api/',
+};
+const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
+AOS.init({ duration: 700, once: true });
+lucide.createIcons();
+</script>
+<script src="{% static 'js/skeletons.js' %}"></script>
+<script src="{% static 'js/inline-edit.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

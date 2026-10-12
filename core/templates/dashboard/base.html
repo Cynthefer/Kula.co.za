@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Dashboard{% endblock %} | {{ site.company_name }}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                kula: {
+                    blue: '#1E73BE',
+                    dark: '#2B2B2B',
+                    grey: '#6B7280',
+                    light: '#F3F4F6',
+                },
+            },
+            fontFamily: {
+                sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+        },
+    },
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+{% if site.favicon %}<link rel="icon" href="{{ site.favicon.url }}">{% endif %}
+</head>
+<body class="bg-kula-light font-sans antialiased text-kula-dark" x-data="{ sidebarOpen: false }">
+
+<div class="flex min-h-screen">
+
+    <aside class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-kula-dark text-white transform transition-transform lg:translate-x-0"
+           :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+        <div class="p-6 border-b border-white/10">
+            <a href="{% url 'dashboard-index' %}" class="flex items-center gap-3">
+                {% if site.logo %}
+                <img src="{{ site.logo_thumbnail.url }}" alt="" class="h-10 w-auto">
+                {% else %}
+                <div class="text-xl font-extrabold text-kula-blue">{{ site.company_name }}</div>
+                {% endif %}
+            </a>
+        </div>
+
+        <nav class="p-4 space-y-1">
+            <a href="{% url 'dashboard-index' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Overview
+            </a>
+
+            <div class="pt-4 pb-2 px-4 text-xs uppercase tracking-wider text-gray-500 font-semibold">Content</div>
+
+            <a href="{% url 'dashboard-site' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="settings" class="w-5 h-5"></i> Site Settings
+            </a>
+            <a href="{% url 'dashboard-hero' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="image" class="w-5 h-5"></i> Hero
+            </a>
+            <a href="{% url 'dashboard-about' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="info" class="w-5 h-5"></i> About
+            </a>
+            <a href="{% url 'dashboard-mission' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="target" class="w-5 h-5"></i> Mission
+            </a>
+
+            <div class="pt-4 pb-2 px-4 text-xs uppercase tracking-wider text-gray-500 font-semibold">Services</div>
+
+            <a href="{% url 'dashboard-services' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="wrench" class="w-5 h-5"></i> Services
+            </a>
+            <a href="{% url 'dashboard-service-categories' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="folder" class="w-5 h-5"></i> Categories
+            </a>
+
+            <div class="pt-4 pb-2 px-4 text-xs uppercase tracking-wider text-gray-500 font-semibold">Equipment</div>
+
+            <a href="{% url 'dashboard-equipment' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="truck" class="w-5 h-5"></i> Equipment
+            </a>
+
+            <div class="pt-4 pb-2 px-4 text-xs uppercase tracking-wider text-gray-500 font-semibold">Extras</div>
+
+            <a href="{% url 'dashboard-stats' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Stats
+            </a>
+            <a href="{% url 'dashboard-partners' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="handshake" class="w-5 h-5"></i> Partners
+            </a>
+            <a href="{% url 'dashboard-seo' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="search" class="w-5 h-5"></i> SEO
+            </a>
+            <a href="{% url 'dashboard-messages' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="mail" class="w-5 h-5"></i> Messages
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-white/10 mt-auto">
+            <a href="{% url 'home' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm">
+                <i data-lucide="external-link" class="w-5 h-5"></i> View Site
+            </a>
+            <form method="post" action="{% url 'dashboard-logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500/20 text-red-300 transition text-sm">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/50 z-30 lg:hidden"></div>
+
+    <main class="flex-1 min-w-0">
+        <header class="bg-white border-b border-kula-light sticky top-0 z-20">
+            <div class="px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = true" class="lg:hidden text-kula-dark">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <h1 class="text-xl font-extrabold text-kula-dark">{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+                <div class="text-sm text-kula-grey">Signed in as <span class="font-semibold text-kula-dark">{{ user.username }}</span></div>
+            </div>
+        </header>
+
+        <div class="p-6">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+
+<script>
+lucide.createIcons();
+const notyf = new Notyf({ duration: 3000, position: { x: 'right', y: 'top' } });
+window.kulaConfig = {
+    isStaff: true,
+    csrfToken: '{{ csrf_token }}',
+    apiBase: '/api/',
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-sortable]').forEach((container) => {
+        Sortable.create(container, {
+            animation: 150,
+            handle: '[data-drag-handle]',
+            onEnd: async () => {
+                const model = container.dataset.sortable;
+                const order = Array.from(container.children).map((c) => parseInt(c.dataset.id, 10));
+                try {
+                    await fetch('/api/reorder/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': window.kulaConfig.csrfToken,
+                        },
+                        body: JSON.stringify({ model, order }),
+                    });
+                    notyf.success('Order saved');
+                } catch (e) {
+                    notyf.error('Reorder failed');
+                }
+            },
+        });
+    });
+});
+
+{% if messages %}
+{% for message in messages %}
+notyf.success('{{ message|escapejs }}');
+{% endfor %}
+{% endif %}
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

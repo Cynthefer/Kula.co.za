@@ -1,0 +1,75 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Overview{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-2xl border border-kula-light p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-kula-blue/10 flex items-center justify-center">
+                <i data-lucide="wrench" class="w-6 h-6 text-kula-blue"></i>
+            </div>
+        </div>
+        <div class="text-3xl font-extrabold text-kula-dark">{{ services_count }}</div>
+        <div class="text-sm text-kula-grey mt-1">Services</div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-kula-light p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-kula-blue/10 flex items-center justify-center">
+                <i data-lucide="truck" class="w-6 h-6 text-kula-blue"></i>
+            </div>
+        </div>
+        <div class="text-3xl font-extrabold text-kula-dark">{{ equipment_brands_count }}</div>
+        <div class="text-sm text-kula-grey mt-1">Equipment Brands</div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-kula-light p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-kula-blue/10 flex items-center justify-center">
+                <i data-lucide="mail" class="w-6 h-6 text-kula-blue"></i>
+            </div>
+            {% if messages_count %}
+            <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">{{ messages_count }} new</span>
+            {% endif %}
+        </div>
+        <div class="text-3xl font-extrabold text-kula-dark">{{ messages_count }}</div>
+        <div class="text-sm text-kula-grey mt-1">Unread Messages</div>
+    </div>
+</div>
+
+<div class="bg-white rounded-2xl border border-kula-light p-6">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-bold text-kula-dark">Recent Messages</h2>
+        <a href="{% url 'dashboard-messages' %}" class="text-sm text-kula-blue hover:underline font-semibold">View all</a>
+    </div>
+
+    {% if recent_messages %}
+    <div class="divide-y divide-kula-light">
+        {% for msg in recent_messages %}
+        <a href="{% url 'dashboard-message-detail' msg.pk %}" class="flex items-center gap-4 py-4 hover:bg-kula-light/50 -mx-2 px-2 rounded-lg transition">
+            <div class="w-10 h-10 rounded-full bg-kula-blue/10 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="user" class="w-5 h-5 text-kula-blue"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                    <div class="font-semibold text-kula-dark truncate">{{ msg.name }}</div>
+                    {% if not msg.is_read %}
+                    <span class="w-2 h-2 bg-red-500 rounded-full flex-shrink-0"></span>
+                    {% endif %}
+                </div>
+                <div class="text-sm text-kula-grey truncate">{{ msg.message|truncatechars:60 }}</div>
+            </div>
+            <div class="text-xs text-kula-grey flex-shrink-0">{{ msg.created_at|date:"M d" }}</div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center text-kula-grey py-12">
+        <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 text-gray-300"></i>
+        <p class="text-sm">No messages yet</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

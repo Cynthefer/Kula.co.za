@@ -1,0 +1,65 @@
+<footer class="bg-kula-dark text-white mt-24">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="md:col-span-2">
+{% if site.logo %}
+<img src="{{ site.logo_thumbnail.url }}" alt="{{ site.company_name }}" class="h-16 w-auto mb-4">
+{% else %}
+<h3 class="text-2xl font-extrabold text-white mb-4">{{ site.company_name }}</h3>
+{% endif %}
+<p class="text-gray-400 text-sm leading-relaxed max-w-md">{{ site.tagline }}</p>
+<p class="text-gray-500 text-xs mt-4">Reg No: {{ site.registration_number }}</p>
+</div>
+
+<div>
+<h4 class="text-sm font-semibold uppercase tracking-wider text-kula-blue mb-4">Quick Links</h4>
+<ul class="space-y-2 text-sm">
+<li><a href="{% url 'about' %}" class="text-gray-400 hover:text-white">About</a></li>
+<li><a href="{% url 'services' %}" class="text-gray-400 hover:text-white">Services</a></li>
+<li><a href="{% url 'equipment' %}" class="text-gray-400 hover:text-white">Equipment</a></li>
+<li><a href="{% url 'contact' %}" class="text-gray-400 hover:text-white">Contact</a></li>
+</ul>
+</div>
+
+<div>
+<h4 class="text-sm font-semibold uppercase tracking-wider text-kula-blue mb-4">Get in Touch</h4>
+<ul class="space-y-3 text-sm text-gray-400">
+<li class="flex items-start gap-2"><i data-lucide="map-pin" class="w-4 h-4 mt-0.5 text-kula-blue"></i><span>{{ site.address }}</span></li>
+<li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-kula-blue"></i><a href="tel:{{ site.phone_primary }}" class="hover:text-white">{{ site.phone_primary }}</a></li>
+{% if site.phone_secondary %}
+<li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-kula-blue"></i><a href="tel:{{ site.phone_secondary }}" class="hover:text-white">{{ site.phone_secondary }}</a></li>
+{% endif %}
+<li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-kula-blue"></i><a href="mailto:{{ site.email }}" class="hover:text-white">{{ site.email }}</a></li>
+</ul>
+</div>
+</div>
+
+<div class="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+<p>&copy; {% now "Y" %} {{ site.company_name }}. All rights reserved.</p>
+<div class="flex items-center gap-4">
+{% if site.facebook_url %}<a href="{{ site.facebook_url }}" class="hover:text-white">Facebook</a>{% endif %}
+{% if site.linkedin_url %}<a href="{{ site.linkedin_url }}" class="hover:text-white">LinkedIn</a>{% endif %}
+{% if site.instagram_url %}<a href="{{ site.instagram_url }}" class="hover:text-white">Instagram</a>{% endif %}
+</div>
+</div>
+</div>
+</footer>
+
+{% if site.whatsapp_number %}
+<a href="https://wa.me/{{ site.whatsapp_number }}" target="_blank" class="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-xl transition">
+<i data-lucide="message-circle" class="w-6 h-6"></i>
+</a>
+{% endif %}
+
+{% if user.is_authenticated and user.is_staff %}
+<div class="fixed bottom-6 left-6 z-50 flex flex-col gap-2">
+<button @click="editMode = !editMode; document.body.classList.toggle('edit-mode', editMode)" class="bg-kula-blue hover:bg-kula-dark text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xl flex items-center gap-2">
+<i data-lucide="pencil" class="w-4 h-4"></i>
+<span x-text="editMode ? 'Exit Edit Mode' : 'Edit Mode'"></span>
+</button>
+<a href="{% url 'dashboard-index' %}" class="bg-kula-dark hover:bg-black text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xl flex items-center gap-2">
+<i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+Dashboard
+</a>
+</div>
+{% endif %}

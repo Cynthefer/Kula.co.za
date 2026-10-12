@@ -1,0 +1,72 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Services{% endblock %}
+{% block page_title %}Services{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-6">
+    <p class="text-sm text-kula-grey">Drag to reorder. Click to edit.</p>
+    <a href="{% url 'dashboard-service-create' %}" class="bg-kula-blue hover:bg-kula-dark text-white font-semibold px-5 py-2.5 rounded-lg transition flex items-center gap-2 text-sm">
+        <i data-lucide="plus" class="w-4 h-4"></i> New Service
+    </a>
+</div>
+
+{% for category in categories %}
+<div class="bg-white rounded-2xl border border-kula-light p-6 mb-6">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-kula-blue flex items-center justify-center">
+                <i data-lucide="folder" class="w-5 h-5 text-white"></i>
+            </div>
+            <div>
+                <h2 class="font-bold text-kula-dark">{{ category.name }}</h2>
+                <p class="text-xs text-kula-grey">{{ category.services.count }} service{{ category.services.count|pluralize }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% if category.services.all %}
+    <div data-sortable="service" class="space-y-3">
+        {% for service in category.services.all %}
+        <div data-id="{{ service.id }}" class="flex items-center gap-4 bg-kula-light rounded-xl p-4 hover:bg-kula-light/70 transition">
+            <button data-drag-handle class="cursor-grab text-kula-grey hover:text-kula-blue">
+                <i data-lucide="grip-vertical" class="w-5 h-5"></i>
+            </button>
+            <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
+                <i data-lucide="{{ service.icon|default:'wrench' }}" class="w-5 h-5 text-kula-blue"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="font-semibold text-kula-dark truncate">{{ service.title }}</div>
+                <div class="text-xs text-kula-grey truncate">{{ service.description|truncatechars:80 }}</div>
+            </div>
+            {% if not service.is_active %}
+            <span class="text-xs bg-gray-200 text-kula-grey px-2 py-1 rounded">Hidden</span>
+            {% endif %}
+            <div class="flex items-center gap-2">
+                <a href="{% url 'dashboard-service-edit' service.pk %}" class="text-kula-blue hover:text-kula-dark p-2">
+                    <i data-lucide="edit-2" class="w-4 h-4"></i>
+                </a>
+                <form method="post" action="{% url 'dashboard-service-delete' service.pk %}" onsubmit="return confirm('Delete this service?')">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-500 hover:text-red-700 p-2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center text-kula-grey text-sm py-8">No services in this category yet.</div>
+    {% endif %}
+</div>
+{% empty %}
+<div class="bg-white rounded-2xl border border-kula-light p-12 text-center">
+    <i data-lucide="wrench" class="w-12 h-12 mx-auto mb-3 text-gray-300"></i>
+    <p class="text-kula-grey mb-4">No categories yet. Create one first.</p>
+    <a href="{% url 'dashboard-service-category-create' %}" class="inline-block bg-kula-blue hover:bg-kula-dark text-white font-semibold px-5 py-2.5 rounded-lg transition text-sm">New Category</a>
+</div>
+{% endfor %}
+
+{% endblock %}

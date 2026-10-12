@@ -1,0 +1,57 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Partners{% endblock %}
+{% block page_title %}Partners{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-2xl border border-kula-light p-6">
+            <h2 class="font-bold text-kula-dark mb-4">Current Partners</h2>
+            {% if items %}
+            <div data-sortable="partner" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {% for item in items %}
+                <div data-id="{{ item.id }}" class="relative bg-kula-light rounded-xl p-4 flex flex-col items-center">
+                    <button data-drag-handle class="absolute top-2 left-2 cursor-grab text-kula-grey hover:text-kula-blue">
+                        <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                    </button>
+                    <form method="post" action="#" class="absolute top-2 right-2">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 hover:text-red-700">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                    <img src="{{ item.logo_display.url }}" alt="{{ item.name }}" class="h-16 w-auto object-contain mb-2">
+                    <div class="text-xs font-semibold text-kula-dark text-center">{{ item.name }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center text-kula-grey text-sm py-8">No partners yet.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div>
+        <div class="bg-white rounded-2xl border border-kula-light p-6">
+            <h2 class="font-bold text-kula-dark mb-4">Add Partner</h2>
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                {% for field in form %}
+                <div>
+                    <label class="block text-sm font-semibold text-kula-dark mb-1">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<p class="text-xs text-red-600 mt-1">{{ field.errors|join:", " }}</p>{% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="w-full bg-kula-blue hover:bg-kula-dark text-white font-semibold py-2.5 rounded-lg transition text-sm">
+                    Add Partner
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

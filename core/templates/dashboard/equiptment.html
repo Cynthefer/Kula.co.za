@@ -1,0 +1,88 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Equipment{% endblock %}
+{% block page_title %}Equipment{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-6">
+    <p class="text-sm text-kula-grey">Drag to reorder brands within each category.</p>
+    <div class="flex gap-2">
+        <a href="{% url 'dashboard-equipment-category-create' %}" class="border border-kula-blue text-kula-blue hover:bg-kula-blue hover:text-white font-semibold px-5 py-2.5 rounded-lg transition flex items-center gap-2 text-sm">
+            <i data-lucide="folder-plus" class="w-4 h-4"></i> New Category
+        </a>
+        <a href="{% url 'dashboard-equipment-brand-create' %}" class="bg-kula-blue hover:bg-kula-dark text-white font-semibold px-5 py-2.5 rounded-lg transition flex items-center gap-2 text-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> New Brand
+        </a>
+    </div>
+</div>
+
+{% for category in categories %}
+<div class="bg-white rounded-2xl border border-kula-light p-6 mb-6">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-kula-blue flex items-center justify-center">
+                <i data-lucide="{{ category.icon|default:'truck' }}" class="w-5 h-5 text-white"></i>
+            </div>
+            <div>
+                <h2 class="font-bold text-kula-dark">{{ category.name }}</h2>
+                <p class="text-xs text-kula-grey">{{ category.brands.count }} brand{{ category.brands.count|pluralize }}</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{% url 'dashboard-equipment-category-edit' category.pk %}" class="text-kula-blue hover:text-kula-dark p-2">
+                <i data-lucide="edit-2" class="w-4 h-4"></i>
+            </a>
+            <form method="post" action="{% url 'dashboard-equipment-category-delete' category.pk %}" onsubmit="return confirm('Delete this category and all its brands?')">
+                {% csrf_token %}
+                <button type="submit" class="text-red-500 hover:text-red-700 p-2">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if category.brands.all %}
+    <div data-sortable="equipment_brand" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {% for brand in category.brands.all %}
+        <div data-id="{{ brand.id }}" class="flex items-center gap-3 bg-kula-light rounded-xl p-3 hover:bg-kula-light/70 transition">
+            <button data-drag-handle class="cursor-grab text-kula-grey hover:text-kula-blue">
+                <i data-lucide="grip-vertical" class="w-5 h-5"></i>
+            </button>
+            {% if brand.logo %}
+            <img src="{{ brand.logo_thumbnail.url }}" alt="{{ brand.name }}" class="w-10 h-10 rounded-lg object-contain bg-white p-1 flex-shrink-0">
+            {% else %}
+            <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
+                <i data-lucide="box" class="w-5 h-5 text-kula-blue"></i>
+            </div>
+            {% endif %}
+            <div class="flex-1 min-w-0">
+                <div class="font-semibold text-kula-dark text-sm truncate">{{ brand.name }}</div>
+                {% if not brand.is_active %}<div class="text-xs text-kula-grey">Hidden</div>{% endif %}
+            </div>
+            <div class="flex items-center gap-1">
+                <a href="{% url 'dashboard-equipment-brand-edit' brand.pk %}" class="text-kula-blue hover:text-kula-dark p-2">
+                    <i data-lucide="edit-2" class="w-4 h-4"></i>
+                </a>
+                <form method="post" action="{% url 'dashboard-equipment-brand-delete' brand.pk %}" onsubmit="return confirm('Delete this brand?')">
+                    {% csrf_token %}
+                    <button type="submit" class="text-red-500 hover:text-red-700 p-2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center text-kula-grey text-sm py-8">No brands in this category yet.</div>
+    {% endif %}
+</div>
+{% empty %}
+<div class="bg-white rounded-2xl border border-kula-light p-12 text-center">
+    <i data-lucide="truck" class="w-12 h-12 mx-auto mb-3 text-gray-300"></i>
+    <p class="text-kula-grey">No equipment categories yet.</p>
+</div>
+{% endfor %}
+
+{% endblock %}

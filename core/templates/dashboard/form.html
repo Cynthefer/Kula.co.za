@@ -1,0 +1,48 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl">
+    <form method="post" enctype="multipart/form-data" class="bg-white rounded-2xl border border-kula-light p-8">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-4">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <div class="space-y-6">
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-kula-dark mb-2">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                <p class="text-xs text-kula-grey mt-1">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                <p class="text-xs text-red-600 mt-1">{{ field.errors|join:", " }}</p>
+                {% endif %}
+                {% if field.value and field.field.widget.input_type == "file" %}
+                <div class="mt-2">
+                    <a href="{{ field.value.url }}" target="_blank" class="text-xs text-kula-blue hover:underline">View current file</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex items-center gap-4 mt-8 pt-6 border-t border-kula-light">
+            <button type="submit" class="bg-kula-blue hover:bg-kula-dark text-white font-semibold px-8 py-3 rounded-lg transition flex items-center gap-2">
+                <i data-lucide="save" class="w-5 h-5"></i> Save
+            </button>
+            <a href="javascript:history.back()" class="text-kula-grey hover:text-kula-dark text-sm font-medium">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
