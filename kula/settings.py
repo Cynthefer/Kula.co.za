@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'imagekit',
     'ordered_model',
     'rest_framework',
+    'django_ckeditor_5',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,6 +64,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'core.context_processors.site_settings',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
