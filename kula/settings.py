@@ -64,6 +64,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'core.context_processors.page_seo',
                 'core.context_processors.site_settings',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
